@@ -7,7 +7,7 @@ import process from 'process'
 import { serverConfig, devClient, clientConfig } from './dev-server'
 import { webpack } from 'webpack'
 
-const isDev = true;
+const isDev = false;
 let serverBuild = false;
 let clientBuild = isDev;
 
@@ -15,7 +15,7 @@ const expressServer = e();
 
 function ressourceRequest(req: Request, res: Response) {
   const distPath = join(__dirname, "..", "..", "dist-ssr", "dist", req.url);
-  
+
   (async () => {
     try {
       if (await pathExists(distPath)) {

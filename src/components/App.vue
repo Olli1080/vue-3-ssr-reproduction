@@ -1,43 +1,15 @@
 <template>
-  <component v-if="component" :is="component">
-    <router-view />
-  </component>
-  <router-view v-else />
+  <content />
 </template>
 
 <script lang="ts">
-import {
-  AsyncComponentLoader,
-  defineAsyncComponent,
-  defineComponent,
-  watch,
-  shallowRef,
-} from "vue";
-import { useRoute } from "vue-router";
+import { defineComponent } from "vue";
+import content from "./main/content.vue";
 
 export default defineComponent({
-  name: "app",
-  setup() {
-    const component = shallowRef<AsyncComponentLoader>();
-    const route = useRoute();
-
-    const updateComponent = () => {
-      if (route.meta.layout) {
-        component.value = defineAsyncComponent(
-          <AsyncComponentLoader>route.meta.layout
-        );
-      }
-    };
-    watch(route, (route) => {
-      updateComponent();
-    });
-    updateComponent();
-
-    return { component };
+  components: {
+    content,
   },
+  name: "app",
 });
 </script>
-
-<style>
-@import "../css/someStyles.less";
-</style>

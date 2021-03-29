@@ -1,10 +1,8 @@
 <template>
-  <header class="justify-between md:items-center some-class py-1.5">
+  <header class="some-class">
     <div>
       <nav>
-        <ul
-          class="flex flex-wrap list-none list-inside px-6 py-3 lg:items-center md:justify-end"
-        >
+        <ul>
           <li
             v-for="(item, index) in routes"
             :key="index"
@@ -25,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import { headerRoutes } from "../../shared/routes";
 
 export default defineComponent({
@@ -39,15 +37,11 @@ export default defineComponent({
 
 <style lang="less">
 .some-class {
-  display: grid;
-  grid-template-columns: 1fr minmax(750px, 1fr);
-  gap: 0;
-
-  background-color: var(--color-secondary);
+  background-color: #404040;
   color: #cccccc;
 }
 
 nav ul li:hover {
-  color: var(--color-primary);
+  color: #ff6600;
 }
 </style>

@@ -1,12 +1,3 @@
 <template>
-  <div>
-    Something
-  </div>
+  <div class="text-center">Some other route</div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({});
-</script>
-

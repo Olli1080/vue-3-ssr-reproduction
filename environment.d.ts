@@ -1,13 +1,9 @@
-import { Connection } from 'mongoose'
-
 declare global {
   namespace NodeJS {
     interface ProcessEnv extends Dict<string> {
       mode?: 'production' | 'development'
       target?: 'server' | 'client'
-      rendering?: 'ssr' | 'csr'
       minimize?: 'false' | 'true'
-      babel?: 'false' | 'true'
     }
   }
 

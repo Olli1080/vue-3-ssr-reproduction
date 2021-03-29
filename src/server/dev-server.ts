@@ -6,12 +6,12 @@ import { webpack } from 'webpack'
 export function clientConfig(development: boolean) {
     const mode = (development) ? 'development' : 'production';
 
-    return configFunction({ rendering: 'ssr', mode: mode });
+    return configFunction({ mode: mode });
 }
 
 export function serverConfig(development: boolean) {
     const mode = (development) ? 'development' : 'production';
-    return configFunction({ rendering: 'ssr', target: 'server', mode: mode });
+    return configFunction({ target: 'server', mode: mode });
 }
 
 export function devClient() {

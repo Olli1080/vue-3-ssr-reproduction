@@ -57,6 +57,7 @@ export default async function ssr(req: Request, res: Response, next: NextFunctio
         <meta charset="utf-8">
         <meta name="viewport" content=width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">`
+        head.innerHTML += `<link rel="preload" href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" as="style">`
         head.innerHTML += `<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">`
 
         doc.getElementById('app')!.innerHTML = await renderToString(app, {});

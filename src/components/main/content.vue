@@ -1,20 +1,17 @@
 <template>
   <div class="content">
-    <primeheader style="flex: none" />
-    <router-view style="flex: 1 1 0%" class="bgrd" />
-    <primefooter style="flex: none"/>
+    <primeheader class="flex-none working" />
+    <router-view class="flex-1 not-working" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import primeheader from "./header.vue";
-import primefooter from "./footer.vue";
 
 export default defineComponent({
   components: {
     primeheader,
-    primefooter,
   },
 });
 </script>
@@ -27,7 +24,11 @@ export default defineComponent({
   flex-direction: column;
 }
 
-.bgrd {
+.working {
+  display: flex;
+}
+
+.not-working {
   background-color: limegreen;
 }
 </style>

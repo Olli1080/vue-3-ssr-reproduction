@@ -1,41 +1,38 @@
-import path from 'path'
+import { resolve } from 'path'
 import { Configuration, DefinePlugin, HotModuleReplacementPlugin } from 'webpack'
 import { VueLoaderPlugin } from 'vue-loader'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import nodeExternals from 'webpack-node-externals'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 
 const config = (env: NodeJS.ProcessEnv = {}): Configuration => {
   const isProd = (env.mode === 'production');
-  const isSSR = (env.rendering === 'ssr');
   const noMinimize = (env.minimize === 'false');
-  const noBabel = (env.babel === 'false');
   const isServer = (env.target === 'server');
-
   const environment = isProd ? 'production' : 'development';
-  
+
   const genConfig = (isServerBuild: boolean = false): Configuration => {
     const minimize = isProd && !noMinimize
-    const useBabel = isProd && !isServerBuild && !noBabel
+
     process.env.NODE_ENV = environment;
     let config: Configuration = {
       mode: environment,
       entry: isServerBuild
-        ? path.resolve(__dirname, 'src', 'server', 'ssr.ts')
-        : [path.resolve(__dirname, 'src', 'main.ts')].concat((!isProd) ? ['webpack-hot-middleware/client?reload=true?overlay=true'] : []),
+        ? resolve(__dirname, 'src', 'server', 'ssr.ts')
+        : [resolve(__dirname, 'src', 'main.ts')].concat((!isProd) ? ['webpack-hot-middleware/client?reload=true?overlay=true'] : []),
       target: isServerBuild ? 'node' : 'web',
       devtool: 'source-map',
       output: {
-        path: path.resolve(
+        path: resolve(
           __dirname,
-          isSSR ? (isServerBuild ? 'dist-ssr/server' : 'dist-ssr/dist') : 'dist'
+          isServerBuild ? 'dist-ssr/server' : 'dist-ssr/dist'
         ),
         filename: (isProd && !isServerBuild) ? '[name].[contenthash].js' : '[name].js',
         publicPath: '/dist/',
         libraryTarget: isServerBuild ? 'commonjs' : undefined,
         assetModuleFilename: (isProd) ? '[name].[contenthash][ext]' : '[name][ext]',
-        chunkFilename: '[name].[chunkhash].js'
+        chunkFilename: '[name].[chunkhash].js',
+        clean: true
       },
       externals: [
         isServerBuild ? nodeExternals({ allowlist: /\.(css|vue)$/ }) : {}
@@ -64,7 +61,6 @@ const config = (env: NodeJS.ProcessEnv = {}): Configuration => {
                 }
               },
               'css-loader',
-              'postcss-loader',
             ],
           },
           {
@@ -77,20 +73,12 @@ const config = (env: NodeJS.ProcessEnv = {}): Configuration => {
                 }
               },
               "css-loader",
-              'postcss-loader',
               'less-loader',
             ],
           },
           {
             test: /\.tsx?$/,
             use: [
-              ...(useBabel ? [
-                {
-                  loader: 'babel-loader',
-                  options: {
-                    presets: ['@babel/preset-env'],
-                  },
-                },] : []),
               {
                 loader: 'ts-loader',
                 options:
@@ -101,18 +89,6 @@ const config = (env: NodeJS.ProcessEnv = {}): Configuration => {
                 }
               },
             ],
-          },
-          {
-            test: /\.m?jsx?$/,
-            use: (useBabel) ? [
-              {
-                loader: 'babel-loader',
-                options: {
-                  presets: ['@babel/preset-env'],
-                },
-              }
-            ] : [],
-            exclude: /node_modules/,
           },
         ],
       },
@@ -131,7 +107,7 @@ const config = (env: NodeJS.ProcessEnv = {}): Configuration => {
           filename: (isProd) ? '[name].[contenthash].css' : '[name].css'
         }),
         new DefinePlugin({
-          __IS_SSR__: isSSR,
+          __IS_SSR__: true,
           __IS_DEV__: !isProd,
           __IS_SERVER__: isServerBuild,
           __VUE_OPTIONS_API__: true,
@@ -139,9 +115,8 @@ const config = (env: NodeJS.ProcessEnv = {}): Configuration => {
         }),
         new HtmlWebpackPlugin({
           filename: 'test.html',
-          template: path.resolve(__dirname, 'src', 'index.html')
+          template: resolve(__dirname, 'src', 'index.html')
         }),
-        new CleanWebpackPlugin()
       ],
       optimization: {
         splitChunks: (isServer) ?
@@ -166,8 +141,8 @@ const config = (env: NodeJS.ProcessEnv = {}): Configuration => {
       },
     }
     if (!isServerBuild && !isProd)
-        config.plugins!.push(new HotModuleReplacementPlugin());
-    
+      config.plugins!.push(new HotModuleReplacementPlugin());
+
     return config;
   }
   return genConfig(isServer)
