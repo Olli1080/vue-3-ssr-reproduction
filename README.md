@@ -6,3 +6,5 @@ When initialy rendering the spa server side the scopeId for the router-view is n
 This changes only after navigation
 
 The project can be run in dev or production mode by altering the variable isDev in line 10 in entry.ts
+
+Edit: This issue has been fixed with vue@3.0.10
