@@ -1,7 +1,5 @@
 import { createDefaultApp } from './shared/app'
 
-const { router, app } = createDefaultApp();
+const { app } = createDefaultApp();
 
-router.isReady().then(() => {
-    app.mount('#app', true);
-})
+app.mount('#app', true);

@@ -26,14 +26,7 @@ export default async function ssr(req: Request, res: Response, next: NextFunctio
         const jsonWebpackStats = devMiddleware?.stats.toJson();
         const { assetsByChunkName, outputPath } = jsonWebpackStats || {};
 
-        const { router, app } = createDefaultApp()
-
-        router.push(req.url);
-        await router.isReady();
-
-
-        const currentRoute = router.currentRoute.value;
-        if (!currentRoute.matched.length) return res.status(404).end();
+        const { app } = createDefaultApp()
 
         res.contentType('html');
         res.charset = 'utf-8';
@@ -51,7 +44,7 @@ export default async function ssr(req: Request, res: Response, next: NextFunctio
         const doc = dom.window.document;
         const head = doc.head;
         doc.children[0].setAttribute('lang', 'en');
-        head.innerHTML += `<title>Hello World</title>`;
+        head.innerHTML += `<title>Hello Tiptap</title>`;
 
         head.innerHTML += `
         <meta charset="utf-8">
